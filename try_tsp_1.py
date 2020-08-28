@@ -5,7 +5,13 @@ import math
 import sys
 
 
+
+# if you want to create fixed cities - not randomly generated each time
+# use:  return [ (x1,y1), (x2, y2), (x3, y3) ]
+# where the x and y are the co-oridinations in question
 def gen_cities(num_cities, min_x, max_x, min_y, max_y):
+    return [(0, 58), (99, 4), (24, 89), (90, 96), (58, 8), (62, 22), (98, 65), (20, 22), (45, 34), (64, 51)]
+
     cities = []
     for i in range(0, num_cities):
         entry = ( random.randrange(min_x, max_x), random.randrange(min_y, max_y))
@@ -15,6 +21,8 @@ def gen_cities(num_cities, min_x, max_x, min_y, max_y):
 
         
 
+# you *could* use itertool here to generate 
+# all the permutations
 def generate(n, A):
     c = []
 
@@ -47,12 +55,16 @@ def generate(n, A):
             i += 1
 
 
-
+# room for improvement here: memoization of the entries, into a table, then look it up...
+# but for now... just calculate it every time
 def calc_eucledian_distance(my_cities, arr):
     length = 0.0
     for i in range(0, len(arr)-1):
         length += math.sqrt( pow(my_cities[arr[i]][0] - my_cities[arr[i+1]][0], 2) + pow(my_cities[arr[i]][1] - my_cities[arr[i+1]][1], 2))
 
+    # close the trip...
+    length += math.sqrt( pow(my_cities[arr[0]][0] - my_cities[arr[len(arr)-1]][0], 2) + pow(my_cities[arr[0]][1] - my_cities[arr[len(arr)-1]][1], 2))
+    
     return length
 
 
@@ -73,7 +85,10 @@ if __name__ == '__main__':
 
     my_cities = gen_cities(how_many_cities, 0, 100, 0, 100)
 
+    how_many_cities = len(my_cities)
+
     print("my_cities: %r" % my_cities)
+    print("len(my_cities): %r" % how_many_cities)
 
     cities_arr = []
     for i in range(0, len(my_cities)):
@@ -95,3 +110,9 @@ if __name__ == '__main__':
         if ((factorial % 1000000) == 0):
             print("remaining: %r" % factorial)
             print("i: %r (min_arr: %r), length: %f" % (i, min_arr, min_length) )
+
+    for i in range(0, len(my_cities)):
+        print("(%r, %r) -> " % (my_cities[i][0], my_cities[i][1]), end='')
+
+    print("(%r, %r)\n" % (my_cities[0][0], my_cities[0][1]) )
+
